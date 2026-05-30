@@ -1,0 +1,13 @@
+---
+- name: Configuration de base pour le réseau de l'ENSAO
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: 1. Configurer le nom de l'équipement (Hostname)
+      arista.eos.eos_config:
+        lines:
+          - hostname {{ inventory_hostname }}
+
+    - name: 2. Sauvegarder la configuration (Copy running-config startup-config)
+      arista.eos.eos_config:
+        save_when: modified

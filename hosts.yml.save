@@ -1,0 +1,16 @@
+all:
+  hosts:
+    router_admin: { ansible_host: 172.20.20.10 }
+    switch_a: { ansible_host: 172.20.20.11 }
+    switch_b: { ansible_host: 172.20.20.12 }
+  vars:
+    ansible_network_os: arista.eos.eos
+    ansible_connection: network_cli
+    ansible_user: admin
+    ansible_password: password
+    ansible_become: yes
+    ansible_become_method: enable
+    ansible_become_password: password
+    # Force keyboard-interactive pour éviter l'erreur d'authentification Arista
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o PreferredAuthentications=keyboard-interactive'
+

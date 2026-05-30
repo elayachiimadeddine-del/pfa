@@ -1,0 +1,21 @@
+---
+- name: Sauvegarde Automatique des Configurations - ENSAO
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: 1. Créer le dossier de sauvegarde en local sur Kali
+      ansible.builtin.file:
+        path: ./backups
+        state: directory
+      run_once: yes
+      delegate_to: localhost
+
+    - name: 2. Capturer la configuration en cours (Running-Config)
+      arista.eos.eos_command:
+        commands: show running-config
+      register: config_actuelle
+
+    - name: 3. Enregistrer la configuration dans un fichier texte
+      ansible.builtin.copy:
+        content: "{{ config_actuelle.stdout[0] }}"
+        dest: "./backups/{{ inventory_hostname }}_backup.txt"

@@ -1,0 +1,28 @@
+---
+- name: Audit et Validation Automatique du Réseau (QA)
+  hosts: router_admin
+  gather_facts: no
+  tasks:
+    - name: 1. Effectuer un test de connectivité (Ping) sur le VLAN 30
+      arista.eos.eos_command:
+        commands: ping 192.168.30.254
+      register: ping_result
+
+    - name: 2. Valider le résultat du Ping
+      ansible.builtin.assert:
+        that:
+          - "'0% packet loss' in ping_result.stdout[0]"
+        success_msg: "TEST RÉUSSI : La passerelle Étudiants est opérationnelle."
+        fail_msg: "ÉCHEC DU TEST : Perte de paquets détectée !"
+
+    - name: 3. Vérifier l'état du serveur DHCP
+      arista.eos.eos_command:
+        commands: show dhcp server
+      register: dhcp_result
+
+    - name: 4. Valider le fonctionnement du DHCP
+      ansible.builtin.assert:
+        that:
+          - "'192.168' in dhcp_result.stdout[0] or 'active' in dhcp_result.stdout[0]"
+        success_msg: "TEST RÉUSSI : Le serveur DHCP est configuré et prêt."
+        fail_msg: "ÉCHEC DU TEST : Le service DHCP ne répond pas."

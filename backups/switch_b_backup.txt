@@ -1,0 +1,38 @@
+! Command: show running-config
+! device: switch-b (cEOSLab, EOS-4.36.0F-47083774.4360F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$YplCdP8DQIjDyre7$brMrVGIDg2/viLQdWe23g5Qg8t2Vc3cSZEEuH2W4QopuvMRjFNo9ktatQ4pv5PCU.HVLz68vm8JSD3Bm9/tzr/
+!
+management api http-commands
+   no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+service routing protocols model multi-agent
+!
+hostname switch_b
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+management api gnmi
+   transport grpc default
+!
+management api netconf
+   transport ssh default
+!
+interface Ethernet1
+!
+interface Management0
+   ip address 172.20.20.12/24
+!
+no ip routing
+!
+ip route 0.0.0.0/0 172.20.20.1
+!
+end

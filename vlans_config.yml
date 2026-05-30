@@ -1,0 +1,32 @@
+---
+- name: Configuration des VLANs de l'ENSAO
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: 1. Créer le VLAN 10 (Administration)
+      arista.eos.eos_config:
+        parents: vlan 10
+        lines:
+          - name Administration
+
+    - name: 2. Créer le VLAN 20 (Professeurs)
+      arista.eos.eos_config:
+        parents: vlan 20
+        lines:
+          - name Professeurs
+
+    - name: 3. Créer le VLAN 30 (Etudiants)
+      arista.eos.eos_config:
+        parents: vlan 30
+        lines:
+          - name Etudiants
+
+    - name: 4. Créer le VLAN 40 (Invites)
+      arista.eos.eos_config:
+        parents: vlan 40
+        lines:
+          - name Invites
+
+    - name: 5. Sauvegarder la configuration
+      arista.eos.eos_config:
+        save_when: modified

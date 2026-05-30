@@ -1,0 +1,26 @@
+---
+- name: Configuration de base du réseau (VLANs et Interfaces)
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Créer les VLANs de l'infrastructure
+      arista.eos.eos_vlans:
+        config:
+          - vlan_id: 10
+            name: VLAN_PFA_PROD
+          - vlan_id: 20
+            name: VLAN_ADMIN
+          - vlan_id: 30
+            name: VLAN_ETUDIANTS
+        state: merged
+
+    - name: Activer les interfaces de liaison
+      arista.eos.eos_interfaces:
+        config:
+          - name: Ethernet1
+            enabled: true
+          - name: Ethernet2
+            enabled: true
+          - name: Ethernet3
+            enabled: true
+        state: merged

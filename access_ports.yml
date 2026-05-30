@@ -1,0 +1,20 @@
+---
+- name: Configuration des ports d'accès (Access Ports) - ENSAO
+  hosts: switch_a, switch_b, switch_c, switch_d
+  gather_facts: no
+  tasks:
+    - name: 1. Assigner les ports physiques aux VLANs
+      arista.eos.eos_config:
+        parents: "{{ item.port }}"
+        lines:
+          - switchport mode access
+          - "switchport access vlan {{ item.vlan }}"
+      loop:
+        - { port: 'interface Ethernet2', vlan: '10' }
+        - { port: 'interface Ethernet3', vlan: '20' }
+        - { port: 'interface Ethernet4', vlan: '30' }
+        - { port: 'interface Ethernet5', vlan: '40' }
+
+    - name: 2. Sauvegarder la configuration
+      arista.eos.eos_config:
+        save_when: modified

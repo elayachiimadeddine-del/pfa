@@ -1,0 +1,63 @@
+! Command: show running-config
+! device: router-admin (cEOSLab, EOS-4.36.0F-47083774.4360F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$0Zgj99jx483pxcOH$NpbdYwqnEv52LXF6qKk7730KjLzdSTom32.ZZlAegTd2WhWOtLatRT2HQq79PFzPs38GjHYqUcvHGi4vGhF5w/
+!
+management api http-commands
+   no shutdown
+!
+dhcp server
+   subnet 192.168.10.0/24
+      default-gateway 192.168.10.254
+   !
+   subnet 192.168.20.0/24
+      default-gateway 192.168.20.254
+   !
+   subnet 192.168.30.0/24
+      default-gateway 192.168.30.254
+   !
+   subnet 192.168.40.0/24
+      default-gateway 192.168.40.254
+!
+no service interface inactive port-id allocation disabled
+!
+service routing protocols model multi-agent
+!
+hostname router_admin
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+management api gnmi
+   transport grpc default
+!
+management api netconf
+   transport ssh default
+!
+interface Ethernet1
+!
+interface Ethernet2
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Management0
+   ip address 172.20.20.10/24
+!
+interface Vlan30
+!
+ip access-list SECURE_ETUDIANTS
+   10 deny ip 192.168.30.0/24 192.168.10.0/24
+   20 permit ip any any
+!
+no ip routing
+!
+ip route 0.0.0.0/0 172.20.20.1
+!
+end

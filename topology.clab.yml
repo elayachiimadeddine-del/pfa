@@ -1,0 +1,38 @@
+name: pfa-ensao
+
+mgmt:
+  network: mgmt
+  ipv4-subnet: 172.20.20.0/24
+
+topology:
+  nodes:
+    router_admin:
+      kind: ceos
+      image: ceos:4.36.0F
+      mgmt-ipv4: 172.20.20.10
+
+    switch_a:
+      kind: ceos
+      image: ceos:4.36.0F
+      mgmt-ipv4: 172.20.20.11
+
+    switch_b:
+      kind: ceos
+      image: ceos:4.36.0F
+      mgmt-ipv4: 172.20.20.12
+
+    switch_c:
+      kind: ceos
+      image: ceos:4.36.0F
+      mgmt-ipv4: 172.20.20.13
+
+    switch_d:
+      kind: ceos
+      image: ceos:4.36.0F
+      mgmt-ipv4: 172.20.20.14
+
+  links:
+    - endpoints: ["router_admin:eth1", "switch_a:eth1"]
+    - endpoints: ["router_admin:eth2", "switch_b:eth1"]
+    - endpoints: ["router_admin:eth3", "switch_c:eth1"]
+    - endpoints: ["router_admin:eth4", "switch_d:eth1"]

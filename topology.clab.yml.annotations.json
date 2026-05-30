@@ -1,0 +1,33 @@
+{
+  "freeTextAnnotations": [],
+  "freeShapeAnnotations": [],
+  "trafficRateAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "router_admin",
+      "position": {
+        "x": 360,
+        "y": 380
+      }
+    },
+    {
+      "id": "switch_a",
+      "position": {
+        "x": 480,
+        "y": 260
+      }
+    },
+    {
+      "id": "switch_b",
+      "position": {
+        "x": 520,
+        "y": 400
+      }
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {}
+}

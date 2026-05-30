@@ -1,0 +1,21 @@
+---
+- name: Configuration de la Sécurité (ACL) - ENSAO
+  hosts: router_admin
+  gather_facts: no
+  tasks:
+    - name: 1. Créer la règle d'accès (ACL)
+      arista.eos.eos_config:
+        parents: ip access-list SECURE_ETUDIANTS
+        lines:
+          - deny ip 192.168.30.0/24 192.168.10.0/24
+          - permit ip any any
+
+    - name: 2. Appliquer l'ACL sur la passerelle des étudiants
+      arista.eos.eos_config:
+        parents: interface Vlan30
+        lines:
+          - ip access-group SECURE_ETUDIANTS in
+
+    - name: 3. Sauvegarder la configuration
+      arista.eos.eos_config:
+        save_when: modified

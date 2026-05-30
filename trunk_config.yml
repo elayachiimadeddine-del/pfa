@@ -1,0 +1,29 @@
+---
+- name: Configuration des liens Trunk - Réseau ENSAO
+  hosts: all
+  gather_facts: no
+  tasks:
+    # Configuration pour le Routeur Principal
+    - name: Configurer les ports vers les switchs (eth1-4) en Trunk sur le Routeur
+      arista.eos.eos_config:
+        lines:
+          - switchport mode trunk
+        parents: "{{ item }}"
+      loop:
+        - interface Ethernet1
+        - interface Ethernet2
+        - interface Ethernet3
+        - interface Ethernet4
+      when: inventory_hostname == "router_admin"
+
+    # Configuration pour les Switchs A, B, C et D
+    - name: Configurer le port vers le routeur (eth1) en Trunk sur les Switchs
+      arista.eos.eos_config:
+        lines:
+          - switchport mode trunk
+        parents: interface Ethernet1
+      when: inventory_hostname in ["switch_a", "switch_b", "switch_c", "switch_d"]
+
+    - name: Sauvegarder la configuration
+      arista.eos.eos_config:
+        save_when: modified

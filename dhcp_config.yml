@@ -1,0 +1,21 @@
+---
+- name: Configuration du Serveur DHCP - ENSAO
+  hosts: router_admin
+  gather_facts: no
+  tasks:
+    - name: 1. Configurer les pools DHCP pour chaque VLAN
+      arista.eos.eos_config:
+        parents:
+          - dhcp server
+          - "subnet 192.168.{{ item }}.0/24"
+        lines:
+          - "default-gateway 192.168.{{ item }}.254"
+      loop:
+        - 10  # Pool Administration
+        - 20  # Pool Professeurs
+        - 30  # Pool Etudiants
+        - 40  # Pool Invités
+
+    - name: 2. Sauvegarder la configuration
+      arista.eos.eos_config:
+        save_when: modified

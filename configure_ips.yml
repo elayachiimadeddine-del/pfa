@@ -1,0 +1,95 @@
+---
+# Plan d'adressage :
+#   Lien 1 : router_admin Eth1 (10.0.0.1/30) ↔ switch_a Eth1 (10.0.0.2/30)
+#   Lien 2 : router_admin Eth2 (10.0.1.1/30) ↔ switch_b Eth1 (10.0.1.2/30)
+#   Lien 3 : router_admin Eth3 (10.0.2.1/30) ↔ switch_c Eth1 (10.0.2.2/30)
+#   Lien 4 : router_admin Eth4 (10.0.3.1/30) ↔ switch_d Eth1 (10.0.3.2/30)
+
+# ── router_admin ─────────────────────────────────────────────────────────────
+- name: Configuration IP — router_admin
+  hosts: router_admin
+  gather_facts: no
+  tasks:
+    - name: Configurer Ethernet1 vers switch_a (10.0.0.1/30)
+      arista.eos.eos_l3_interfaces:
+        config:
+          - name: Ethernet1
+            ipv4:
+              - address: 10.0.0.1/30
+        state: merged
+
+    - name: Configurer Ethernet2 vers switch_b (10.0.1.1/30)
+      arista.eos.eos_l3_interfaces:
+        config:
+          - name: Ethernet2
+            ipv4:
+              - address: 10.0.1.1/30
+        state: merged
+
+    - name: Configurer Ethernet3 vers switch_c (10.0.2.1/30)
+      arista.eos.eos_l3_interfaces:
+        config:
+          - name: Ethernet3
+            ipv4:
+              - address: 10.0.2.1/30
+        state: merged
+
+    - name: Configurer Ethernet4 vers switch_d (10.0.3.1/30)
+      arista.eos.eos_l3_interfaces:
+        config:
+          - name: Ethernet4
+            ipv4:
+              - address: 10.0.3.1/30
+        state: merged
+
+# ── switch_a ─────────────────────────────────────────────────────────────────
+- name: Configuration IP — switch_a
+  hosts: switch_a
+  gather_facts: no
+  tasks:
+    - name: Configurer Ethernet1 vers router_admin (10.0.0.2/30)
+      arista.eos.eos_l3_interfaces:
+        config:
+          - name: Ethernet1
+            ipv4:
+              - address: 10.0.0.2/30
+        state: merged
+
+# ── switch_b ─────────────────────────────────────────────────────────────────
+- name: Configuration IP — switch_b
+  hosts: switch_b
+  gather_facts: no
+  tasks:
+    - name: Configurer Ethernet1 vers router_admin (10.0.1.2/30)
+      arista.eos.eos_l3_interfaces:
+        config:
+          - name: Ethernet1
+            ipv4:
+              - address: 10.0.1.2/30
+        state: merged
+
+# ── switch_c ─────────────────────────────────────────────────────────────────
+- name: Configuration IP — switch_c
+  hosts: switch_c
+  gather_facts: no
+  tasks:
+    - name: Configurer Ethernet1 vers router_admin (10.0.2.2/30)
+      arista.eos.eos_l3_interfaces:
+        config:
+          - name: Ethernet1
+            ipv4:
+              - address: 10.0.2.2/30
+        state: merged
+
+# ── switch_d ─────────────────────────────────────────────────────────────────
+- name: Configuration IP — switch_d
+  hosts: switch_d
+  gather_facts: no
+  tasks:
+    - name: Configurer Ethernet1 vers router_admin (10.0.3.2/30)
+      arista.eos.eos_l3_interfaces:
+        config:
+          - name: Ethernet1
+            ipv4:
+              - address: 10.0.3.2/30
+        state: merged

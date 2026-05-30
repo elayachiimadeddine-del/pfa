@@ -1,0 +1,24 @@
+---
+- name: Configuration du Routage Inter-VLAN (SVI)
+  hosts: router_admin
+  gather_facts: no
+  tasks:
+    - name: 1. Activer le routage IP global
+      arista.eos.eos_config:
+        lines:
+          - ip routing
+
+    - name: 2. Configurer les adresses IP (Passerelles) pour chaque VLAN
+      arista.eos.eos_config:
+        parents: "{{ item.intf }}"
+        lines:
+          - "ip address {{ item.ip }}"
+      loop:
+        - { intf: 'interface Vlan10', ip: '192.168.10.254/24' }
+        - { intf: 'interface Vlan20', ip: '192.168.20.254/24' }
+        - { intf: 'interface Vlan30', ip: '192.168.30.254/24' }
+        - { intf: 'interface Vlan40', ip: '192.168.40.254/24' }
+
+    - name: 3. Sauvegarder la configuration
+      arista.eos.eos_config:
+        save_when: modified
