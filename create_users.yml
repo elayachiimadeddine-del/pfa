@@ -1,0 +1,46 @@
+---
+- name: Création des utilisateurs sur tous les équipements
+  hosts: all
+  gather_facts: no
+
+  vars:
+    network_users:
+      - username: admin_ensao
+        privilege: 15
+        role: network-admin
+        password: "Admin@ENSAO2026"
+
+      - username: prof_ensao
+        privilege: 7
+        role: network-operator
+        password: "Prof@ENSAO2026"
+
+      - username: etudiant_ensao
+        privilege: 1
+        role: read-only
+        password: "Etud@ENSAO2026"
+
+      - username: monitoring
+        privilege: 1
+        role: read-only
+        password: "Monitor@2026"
+
+  tasks:
+
+    - name: 1. Créer les utilisateurs
+      arista.eos.eos_config:
+        lines:
+          - "username {{ item.username }} privilege {{ item.privilege }} role {{ item.role }} secret {{ item.password }}"
+        save_when: modified
+      loop: "{{ network_users }}"
+      loop_control:
+        label: "{{ item.username }}"
+
+    - name: 2. Vérifier les utilisateurs créés
+      arista.eos.eos_command:
+        commands: show running-config | include username
+      register: users_output
+
+    - name: 3. Afficher le résultat
+      ansible.builtin.debug:
+        msg: "{{ users_output.stdout[0] }}"
